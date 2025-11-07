@@ -1,15 +1,13 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { adminAPI } from '../../api/services';
+import AdminNavigation from '../../components/AdminNavigation';
 import './AdminDashboard.css';
 
 const AdminDashboard = () => {
-  const { user, logout } = useAuth();
-  const navigate = useNavigate();
+  const { user } = useAuth();
   const [stats, setStats] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
     loadStats();
@@ -26,11 +24,6 @@ const AdminDashboard = () => {
     }
   };
 
-  const handleLogout = () => {
-    logout();
-    navigate('/admin/login');
-  };
-
   if (loading) {
     return (
       <div className="admin-dashboard">
@@ -41,118 +34,10 @@ const AdminDashboard = () => {
 
   return (
     <div className="admin-dashboard">
-      <div className="dashboard-header">
-        <div className="header-content">
-          <h1>Admin Dashboard</h1>
-          <p>Welcome back, {user?.firstName} {user?.lastName}</p>
-        </div>
-        <div className="header-actions">
-          <button onClick={handleLogout} className="logout-btn">
-            Logout
-          </button>
-          <button
-            className="hamburger-btn"
-            onClick={() => setMenuOpen(!menuOpen)}
-            aria-label="Menu"
-          >
-            <span></span>
-            <span></span>
-            <span></span>
-          </button>
-        </div>
-      </div>
-
-      {/* Desktop Navigation */}
-      <div className="dashboard-nav">
-        <button
-          onClick={() => navigate('/admin/dashboard')}
-          className="nav-btn active"
-        >
-          Dashboard
-        </button>
-        <button
-          onClick={() => navigate('/admin/complaints')}
-          className="nav-btn"
-        >
-          Complaints
-        </button>
-        <button
-          onClick={() => navigate('/admin/workers')}
-          className="nav-btn"
-        >
-          Workers
-        </button>
-        <button
-          onClick={() => navigate('/admin/settings')}
-          className="nav-btn"
-        >
-          Settings
-        </button>
-      </div>
-
-      {/* Mobile Slide Drawer */}
-      <div className={`mobile-drawer ${menuOpen ? 'open' : ''}`}>
-        <div className="drawer-overlay" onClick={() => setMenuOpen(false)}></div>
-        <div className="drawer-content">
-          <div className="drawer-header">
-            <h3>Menu</h3>
-            <button
-              className="close-drawer"
-              onClick={() => setMenuOpen(false)}
-              aria-label="Close menu"
-            >
-              ✕
-            </button>
-          </div>
-          <nav className="drawer-nav">
-            <button
-              onClick={() => {
-                navigate('/admin/dashboard');
-                setMenuOpen(false);
-              }}
-              className="drawer-nav-btn active"
-            >
-              📊 Dashboard
-            </button>
-            <button
-              onClick={() => {
-                navigate('/admin/complaints');
-                setMenuOpen(false);
-              }}
-              className="drawer-nav-btn"
-            >
-              📋 Complaints
-            </button>
-            <button
-              onClick={() => {
-                navigate('/admin/workers');
-                setMenuOpen(false);
-              }}
-              className="drawer-nav-btn"
-            >
-              👷 Workers
-            </button>
-            <button
-              onClick={() => {
-                navigate('/admin/settings');
-                setMenuOpen(false);
-              }}
-              className="drawer-nav-btn"
-            >
-              ⚙️ Settings
-            </button>
-            <button
-              onClick={() => {
-                handleLogout();
-                setMenuOpen(false);
-              }}
-              className="drawer-nav-btn logout"
-            >
-              🚪 Logout
-            </button>
-          </nav>
-        </div>
-      </div>
+      <AdminNavigation
+        title="Admin Dashboard"
+        subtitle={`Welcome back, ${user?.firstName} ${user?.lastName}`}
+      />
 
       <div className="stats-grid">
         <div className="stat-card">

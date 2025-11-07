@@ -356,11 +356,16 @@
   }
 
   .images-grid {
-    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 0.75rem;
   }
 
   .modal-large {
     max-width: 95%;
+  }
+
+  .modal-content {
+    padding: 1.5rem;
   }
 
   .action-buttons {
@@ -369,6 +374,31 @@
   }
 
   .action-btn {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .images-grid {
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: 0.5rem;
+  }
+
+  .complaints-container {
+    padding: 1rem;
+  }
+
+  .modal-content {
+    padding: 1rem;
+    width: 95%;
+  }
+
+  .modal-actions {
+    flex-direction: column;
+  }
+
+  .cancel-btn,
+  .modal-actions .submit-btn {
     width: 100%;
   }
 }

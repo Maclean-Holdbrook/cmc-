@@ -1,14 +1,13 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { useToast } from '../../components/common/Toast';
 import { adminAPI } from '../../api/services';
+import AdminNavigation from '../../components/AdminNavigation';
 import './AdminDashboard.css';
 import './AdminSettings.css';
 
 const AdminSettings = () => {
-  const { user, logout, login } = useAuth();
-  const navigate = useNavigate();
+  const { user, login } = useAuth();
   const { showSuccess, showError } = useToast();
 
   const [profileData, setProfileData] = useState({
@@ -34,11 +33,6 @@ const AdminSettings = () => {
     password: '',
     phoneNumber: ''
   });
-
-  const handleLogout = () => {
-    logout();
-    navigate('/admin/login');
-  };
 
   const handleProfileSubmit = async (e) => {
     e.preventDefault();
@@ -118,30 +112,10 @@ const AdminSettings = () => {
 
   return (
     <div className="admin-dashboard">
-      <div className="dashboard-header">
-        <div className="header-content">
-          <h1>Admin Settings</h1>
-          <p>Manage your account settings</p>
-        </div>
-        <button onClick={handleLogout} className="logout-btn">
-          Logout
-        </button>
-      </div>
-
-      <div className="dashboard-nav">
-        <button onClick={() => navigate('/admin/dashboard')} className="nav-btn">
-          Dashboard
-        </button>
-        <button onClick={() => navigate('/admin/complaints')} className="nav-btn">
-          Complaints
-        </button>
-        <button onClick={() => navigate('/admin/workers')} className="nav-btn">
-          Workers
-        </button>
-        <button onClick={() => navigate('/admin/settings')} className="nav-btn active">
-          Settings
-        </button>
-      </div>
+      <AdminNavigation
+        title="Admin Settings"
+        subtitle="Manage your account settings"
+      />
 
       <div className="settings-container">
         {/* Profile Settings */}

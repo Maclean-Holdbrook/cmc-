@@ -107,8 +107,114 @@
   margin-top: 1rem;
 }
 
+/* Error Modal */
+.error-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+  animation: fadeIn 0.2s ease-in;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.error-modal-content {
+  background: white;
+  border-radius: 12px;
+  max-width: 400px;
+  width: 90%;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  animation: slideUp 0.3s ease-out;
+  overflow: hidden;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(30px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.error-modal-header {
+  background: linear-gradient(135deg, #f5576c 0%, #d43f54 100%);
+  padding: 1.5rem;
+  text-align: center;
+}
+
+.error-modal-header h3 {
+  color: white;
+  margin: 0;
+  font-size: 1.3rem;
+  font-weight: 600;
+}
+
+.error-modal-body {
+  padding: 2rem 1.5rem;
+  text-align: center;
+}
+
+.error-modal-body p {
+  color: #333;
+  font-size: 1rem;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.error-modal-footer {
+  padding: 1rem 1.5rem 1.5rem;
+  display: flex;
+  justify-content: center;
+}
+
+.error-modal-btn {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  padding: 0.75rem 2rem;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+  min-width: 120px;
+}
+
+.error-modal-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+}
+
 @media (max-width: 768px) {
   .login-card {
     padding: 2rem;
+  }
+
+  .error-modal-content {
+    width: 95%;
+  }
+
+  .error-modal-header h3 {
+    font-size: 1.1rem;
+  }
+
+  .error-modal-body {
+    padding: 1.5rem 1rem;
   }
 }

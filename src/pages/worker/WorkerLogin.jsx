@@ -10,6 +10,7 @@ const WorkerLogin = () => {
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [showErrorModal, setShowErrorModal] = useState(false);
   const { login } = useAuth();
   const navigate = useNavigate();
 
@@ -17,6 +18,7 @@ const WorkerLogin = () => {
     e.preventDefault();
     setLoading(true);
     setError('');
+    setShowErrorModal(false);
 
     try {
       const response = await workerAPI.login(email, password);
@@ -26,6 +28,7 @@ const WorkerLogin = () => {
       navigate('/worker/dashboard');
     } catch (err) {
       setError(err.response?.data?.message || 'Login failed. Please try again.');
+      setShowErrorModal(true);
     } finally {
       setLoading(false);
     }
@@ -38,8 +41,6 @@ const WorkerLogin = () => {
           <h1>Worker Login</h1>
           <p>Access your assigned tickets</p>
         </div>
-
-        {error && <div className="alert alert-error">{error}</div>}
 
         <form onSubmit={handleSubmit} className="login-form">
           <div className="form-group">
@@ -77,6 +78,27 @@ const WorkerLogin = () => {
           <p><a href="/">← Back to Home</a></p>
         </div>
       </div>
+
+      {showErrorModal && (
+        <div className="error-modal-overlay" onClick={() => setShowErrorModal(false)}>
+          <div className="error-modal-content" onClick={(e) => e.stopPropagation()}>
+            <div className="error-modal-header">
+              <h3>Login Failed</h3>
+            </div>
+            <div className="error-modal-body">
+              <p>{error}</p>
+            </div>
+            <div className="error-modal-footer">
+              <button
+                onClick={() => setShowErrorModal(false)}
+                className="error-modal-btn"
+              >
+                OK
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

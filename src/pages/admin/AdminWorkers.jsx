@@ -1,14 +1,11 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../../context/AuthContext';
 import { useToast } from '../../components/common/Toast';
 import ConfirmDialog from '../../components/common/ConfirmDialog';
 import { adminAPI } from '../../api/services';
+import AdminNavigation from '../../components/AdminNavigation';
 import './AdminWorkers.css';
 
 const AdminWorkers = () => {
-  const { logout } = useAuth();
-  const navigate = useNavigate();
   const { showSuccess, showError } = useToast();
   const [workers, setWorkers] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -76,29 +73,7 @@ const AdminWorkers = () => {
 
   return (
     <div className="admin-dashboard">
-      <div className="dashboard-header">
-        <div className="header-content">
-          <h1>Manage Workers</h1>
-        </div>
-        <button onClick={() => logout() || navigate('/admin/login')} className="logout-btn">
-          Logout
-        </button>
-      </div>
-
-      <div className="dashboard-nav">
-        <button onClick={() => navigate('/admin/dashboard')} className="nav-btn">
-          Dashboard
-        </button>
-        <button onClick={() => navigate('/admin/complaints')} className="nav-btn">
-          Complaints
-        </button>
-        <button onClick={() => navigate('/admin/workers')} className="nav-btn active">
-          Workers
-        </button>
-        <button onClick={() => navigate('/admin/settings')} className="nav-btn">
-          Settings
-        </button>
-      </div>
+      <AdminNavigation title="Manage Workers" />
 
       <div className="workers-container">
         <div className="workers-header">

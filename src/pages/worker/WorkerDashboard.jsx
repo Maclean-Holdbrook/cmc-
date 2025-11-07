@@ -100,13 +100,7 @@ const WorkerDashboard = () => {
         <div className="drawer-content">
           <div className="drawer-header">
             <h3>Menu</h3>
-            <button
-              className="close-drawer"
-              onClick={() => setMenuOpen(false)}
-              aria-label="Close menu"
-            >
-              ✕
-            </button>
+            <span className="drawer-hint">Tap outside to close</span>
           </div>
           <nav className="drawer-nav">
             <button
@@ -202,7 +196,7 @@ const WorkerDashboard = () => {
                   {ticket.complaint.images.map((img, idx) => (
                     <img
                       key={idx}
-                      src={`http://localhost:5000${img}`}
+                      src={`${import.meta.env.VITE_API_URL.replace('/api/v1', '')}${img}`}
                       alt={`Issue ${idx + 1}`}
                       className="ticket-image"
                     />

@@ -1,13 +1,10 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../../context/AuthContext';
 import { useToast } from '../../components/common/Toast';
 import { adminAPI } from '../../api/services';
+import AdminNavigation from '../../components/AdminNavigation';
 import './AdminComplaints.css';
 
 const AdminComplaints = () => {
-  const { logout } = useAuth();
-  const navigate = useNavigate();
   const { showSuccess, showError } = useToast();
   const [complaints, setComplaints] = useState([]);
   const [workers, setWorkers] = useState([]);
@@ -72,29 +69,7 @@ const AdminComplaints = () => {
 
   return (
     <div className="admin-dashboard">
-      <div className="dashboard-header">
-        <div className="header-content">
-          <h1>Manage Complaints</h1>
-        </div>
-        <button onClick={() => logout() || navigate('/admin/login')} className="logout-btn">
-          Logout
-        </button>
-      </div>
-
-      <div className="dashboard-nav">
-        <button onClick={() => navigate('/admin/dashboard')} className="nav-btn">
-          Dashboard
-        </button>
-        <button onClick={() => navigate('/admin/complaints')} className="nav-btn active">
-          Complaints
-        </button>
-        <button onClick={() => navigate('/admin/workers')} className="nav-btn">
-          Workers
-        </button>
-        <button onClick={() => navigate('/admin/settings')} className="nav-btn">
-          Settings
-        </button>
-      </div>
+      <AdminNavigation title="Manage Complaints" />
 
       <div className="complaints-container">
         {complaints.length === 0 ? (
@@ -309,9 +284,9 @@ const AdminComplaints = () => {
                         {selectedComplaint.images.map((image, index) => (
                           <div key={index} className="image-item">
                             <img
-                              src={`http://localhost:5000${image}`}
+                              src={`${import.meta.env.VITE_API_URL.replace('/api/v1', '')}${image}`}
                               alt={`Complaint ${index + 1}`}
-                              onClick={() => window.open(`http://localhost:5000${image}`, '_blank')}
+                              onClick={() => window.open(`${import.meta.env.VITE_API_URL.replace('/api/v1', '')}${image}`, '_blank')}
                             />
                           </div>
                         ))}
