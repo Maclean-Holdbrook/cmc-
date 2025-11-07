@@ -1,0 +1,153 @@
+.alert-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10000;
+  padding: 1rem;
+  animation: alertFadeIn 0.2s ease-in-out;
+}
+
+@keyframes alertFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.alert-modal-container {
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  width: 100%;
+  max-width: 450px;
+  padding: 2rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  position: relative;
+  animation: alertSlideIn 0.3s ease-out;
+}
+
+@keyframes alertSlideIn {
+  from {
+    transform: scale(0.9) translateY(-20px);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1) translateY(0);
+    opacity: 1;
+  }
+}
+
+.alert-icon-wrapper {
+  flex-shrink: 0;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.alert-icon {
+  width: 28px;
+  height: 28px;
+}
+
+.alert-success .alert-icon-wrapper {
+  background-color: #dcfce7;
+  color: #16a34a;
+}
+
+.alert-error .alert-icon-wrapper {
+  background-color: #fee2e2;
+  color: #dc2626;
+}
+
+.alert-warning .alert-icon-wrapper {
+  background-color: #fef3c7;
+  color: #f59e0b;
+}
+
+.alert-info .alert-icon-wrapper {
+  background-color: #dbeafe;
+  color: #2563eb;
+}
+
+.alert-content {
+  flex: 1;
+  padding-top: 0.25rem;
+}
+
+.alert-title {
+  margin: 0 0 0.5rem 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.alert-message {
+  margin: 0;
+  font-size: 0.95rem;
+  color: #6b7280;
+  line-height: 1.5;
+}
+
+.alert-close-btn {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: none;
+  border: none;
+  font-size: 1.75rem;
+  color: #9ca3af;
+  cursor: pointer;
+  padding: 0;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  transition: all 0.2s;
+  line-height: 1;
+}
+
+.alert-close-btn:hover {
+  background-color: #f3f4f6;
+  color: #1f2937;
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+  .alert-modal-container {
+    max-width: 100%;
+    padding: 1.5rem;
+  }
+
+  .alert-icon-wrapper {
+    width: 40px;
+    height: 40px;
+  }
+
+  .alert-icon {
+    width: 24px;
+    height: 24px;
+  }
+
+  .alert-title {
+    font-size: 1.125rem;
+  }
+
+  .alert-message {
+    font-size: 0.875rem;
+  }
+}

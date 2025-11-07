@@ -1,0 +1,82 @@
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { AuthProvider } from './context/AuthContext';
+import { ToastProvider } from './components/common/Toast';
+import ProtectedRoute from './components/ProtectedRoute';
+
+// Pages
+import Home from './pages/Home';
+import StaffComplaintForm from './pages/staff/StaffComplaintForm';
+import AdminLogin from './pages/admin/AdminLogin';
+import AdminDashboard from './pages/admin/AdminDashboard';
+import AdminComplaints from './pages/admin/AdminComplaints';
+import AdminWorkers from './pages/admin/AdminWorkers';
+import AdminSettings from './pages/admin/AdminSettings';
+import WorkerLogin from './pages/worker/WorkerLogin';
+import WorkerDashboard from './pages/worker/WorkerDashboard';
+
+function App() {
+  return (
+    <Router>
+      <AuthProvider>
+        <ToastProvider>
+        <Routes>
+          {/* Public Routes */}
+          <Route path="/" element={<Home />} />
+          <Route path="/submit-complaint" element={<StaffComplaintForm />} />
+
+          {/* Admin Routes */}
+          <Route path="/admin/login" element={<AdminLogin />} />
+          <Route
+            path="/admin/dashboard"
+            element={
+              <ProtectedRoute requiredRole="ADMIN">
+                <AdminDashboard />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin/complaints"
+            element={
+              <ProtectedRoute requiredRole="ADMIN">
+                <AdminComplaints />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin/workers"
+            element={
+              <ProtectedRoute requiredRole="ADMIN">
+                <AdminWorkers />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin/settings"
+            element={
+              <ProtectedRoute requiredRole="ADMIN">
+                <AdminSettings />
+              </ProtectedRoute>
+            }
+          />
+
+          {/* Worker Routes */}
+          <Route path="/worker/login" element={<WorkerLogin />} />
+          <Route
+            path="/worker/dashboard"
+            element={
+              <ProtectedRoute requiredRole="WORKER">
+                <WorkerDashboard />
+              </ProtectedRoute>
+            }
+          />
+
+          {/* 404 Route */}
+          <Route path="*" element={<Home />} />
+        </Routes>
+        </ToastProvider>
+      </AuthProvider>
+    </Router>
+  );
+}
+
+export default App;
