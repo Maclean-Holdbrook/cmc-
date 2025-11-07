@@ -9,6 +9,7 @@ const AdminDashboard = () => {
   const navigate = useNavigate();
   const [stats, setStats] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
     loadStats();
@@ -45,11 +46,23 @@ const AdminDashboard = () => {
           <h1>Admin Dashboard</h1>
           <p>Welcome back, {user?.firstName} {user?.lastName}</p>
         </div>
-        <button onClick={handleLogout} className="logout-btn">
-          Logout
-        </button>
+        <div className="header-actions">
+          <button onClick={handleLogout} className="logout-btn">
+            Logout
+          </button>
+          <button
+            className="hamburger-btn"
+            onClick={() => setMenuOpen(!menuOpen)}
+            aria-label="Menu"
+          >
+            <span></span>
+            <span></span>
+            <span></span>
+          </button>
+        </div>
       </div>
 
+      {/* Desktop Navigation */}
       <div className="dashboard-nav">
         <button
           onClick={() => navigate('/admin/dashboard')}
@@ -75,6 +88,70 @@ const AdminDashboard = () => {
         >
           Settings
         </button>
+      </div>
+
+      {/* Mobile Slide Drawer */}
+      <div className={`mobile-drawer ${menuOpen ? 'open' : ''}`}>
+        <div className="drawer-overlay" onClick={() => setMenuOpen(false)}></div>
+        <div className="drawer-content">
+          <div className="drawer-header">
+            <h3>Menu</h3>
+            <button
+              className="close-drawer"
+              onClick={() => setMenuOpen(false)}
+              aria-label="Close menu"
+            >
+              ✕
+            </button>
+          </div>
+          <nav className="drawer-nav">
+            <button
+              onClick={() => {
+                navigate('/admin/dashboard');
+                setMenuOpen(false);
+              }}
+              className="drawer-nav-btn active"
+            >
+              📊 Dashboard
+            </button>
+            <button
+              onClick={() => {
+                navigate('/admin/complaints');
+                setMenuOpen(false);
+              }}
+              className="drawer-nav-btn"
+            >
+              📋 Complaints
+            </button>
+            <button
+              onClick={() => {
+                navigate('/admin/workers');
+                setMenuOpen(false);
+              }}
+              className="drawer-nav-btn"
+            >
+              👷 Workers
+            </button>
+            <button
+              onClick={() => {
+                navigate('/admin/settings');
+                setMenuOpen(false);
+              }}
+              className="drawer-nav-btn"
+            >
+              ⚙️ Settings
+            </button>
+            <button
+              onClick={() => {
+                handleLogout();
+                setMenuOpen(false);
+              }}
+              className="drawer-nav-btn logout"
+            >
+              🚪 Logout
+            </button>
+          </nav>
+        </div>
       </div>
 
       <div className="stats-grid">

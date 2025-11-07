@@ -33,10 +33,9 @@ const Home = () => {
         ))}
       </div>
 
-      {/* Logo */}
-      <img src={cmcLogo} alt="CMC Logo" className="cmc-logo" />
-
       <div className="home-content">
+        {/* Logo */}
+        <img src={cmcLogo} alt="CMC Logo" className="cmc-logo" />
         <h1>CMC IT SYSTEM SUPPORT</h1>
         {/* <p className="subtitle">Efficient complaint tracking and resolution</p> */}
 
