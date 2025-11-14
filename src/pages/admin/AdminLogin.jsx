@@ -20,6 +20,13 @@ const AdminLogin = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    e.stopPropagation();
+
+    // Don't submit if modal is showing or already loading
+    if (showErrorModal || loading) {
+      return;
+    }
+
     setLoading(true);
     setError('');
     setShowErrorModal(false);
@@ -36,6 +43,7 @@ const AdminLogin = () => {
     } catch (err) {
       setError(err.response?.data?.message || 'Login failed. Please try again.');
       setShowErrorModal(true);
+      // DO NOT NAVIGATE - STAY ON LOGIN PAGE
     } finally {
       setLoading(false);
     }
