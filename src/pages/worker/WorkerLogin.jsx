@@ -98,8 +98,8 @@ const WorkerLogin = () => {
       </div>
 
       {showErrorModal && (
-        <div className="error-modal-overlay" onClick={() => setShowErrorModal(false)}>
-          <div className="error-modal-content" onClick={(e) => e.stopPropagation()}>
+        <div className="error-modal-overlay">
+          <div className="error-modal-content">
             <div className="error-modal-header">
               <h3>Login Failed</h3>
             </div>
@@ -110,6 +110,7 @@ const WorkerLogin = () => {
               <button
                 onClick={() => setShowErrorModal(false)}
                 className="error-modal-btn"
+                type="button"
               >
                 Try Again
               </button>

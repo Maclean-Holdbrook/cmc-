@@ -154,7 +154,7 @@ const StaffComplaintForm = () => {
               name="description"
               value={formData.description}
               onChange={handleChange}
-              rows="5"
+              rows="3"
               placeholder=""
             />
           </div>
