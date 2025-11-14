@@ -155,8 +155,10 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 2000;
+  z-index: 9999;
   animation: fadeIn 0.2s ease-in;
+  pointer-events: all;
+  isolation: isolate;
 }
 
 @keyframes fadeIn {
@@ -176,6 +178,9 @@
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
   animation: slideUp 0.3s ease-out;
   overflow: hidden;
+  position: relative;
+  z-index: 10000;
+  pointer-events: all;
 }
 
 @keyframes slideUp {

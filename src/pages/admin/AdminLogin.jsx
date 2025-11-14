@@ -98,8 +98,15 @@ const AdminLogin = () => {
       </div>
 
       {showErrorModal && (
-        <div className="error-modal-overlay">
-          <div className="error-modal-content">
+        <div
+          className="error-modal-overlay"
+          onClick={(e) => e.stopPropagation()}
+          onMouseDown={(e) => e.stopPropagation()}
+        >
+          <div
+            className="error-modal-content"
+            onClick={(e) => e.stopPropagation()}
+          >
             <div className="error-modal-header">
               <h3>Login Failed</h3>
             </div>
@@ -108,7 +115,11 @@ const AdminLogin = () => {
             </div>
             <div className="error-modal-footer">
               <button
-                onClick={() => setShowErrorModal(false)}
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  setShowErrorModal(false);
+                }}
                 className="error-modal-btn"
                 type="button"
               >
