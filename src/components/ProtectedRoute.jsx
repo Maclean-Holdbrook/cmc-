@@ -1,8 +1,9 @@
-import { Navigate } from 'react-router-dom';
+import { Navigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
 const ProtectedRoute = ({ children, requiredRole }) => {
   const { isAuthenticated, role, loading } = useAuth();
+  const location = useLocation();
 
   if (loading) {
     return (
@@ -20,7 +21,8 @@ const ProtectedRoute = ({ children, requiredRole }) => {
   }
 
   if (!isAuthenticated) {
-    return <Navigate to={`/${requiredRole.toLowerCase()}/login`} replace />;
+    // Save the current location to redirect back after login
+    return <Navigate to={`/${requiredRole.toLowerCase()}/login`} state={{ from: location.pathname }} replace />;
   }
 
   if (role !== requiredRole) {

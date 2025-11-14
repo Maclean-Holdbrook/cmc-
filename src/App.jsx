@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import { ToastProvider } from './components/common/Toast';
 import ProtectedRoute from './components/ProtectedRoute';
+import ScrollToTop from './components/ScrollToTop';
 
 // Pages
 import Home from './pages/Home';
@@ -17,6 +18,7 @@ import WorkerDashboard from './pages/worker/WorkerDashboard';
 function App() {
   return (
     <Router>
+      <ScrollToTop />
       <AuthProvider>
         <ToastProvider>
         <Routes>

@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { workerAPI } from '../../api/services';
 import '../admin/Login.css';
@@ -13,6 +13,18 @@ const WorkerLogin = () => {
   const [showErrorModal, setShowErrorModal] = useState(false);
   const { login } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
+
+  // Redirect to homepage after 3 seconds when error modal is shown
+  useEffect(() => {
+    let timer;
+    if (showErrorModal) {
+      timer = setTimeout(() => {
+        navigate('/');
+      }, 3000);
+    }
+    return () => clearTimeout(timer);
+  }, [showErrorModal, navigate]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -25,13 +37,21 @@ const WorkerLogin = () => {
       // Backend returns { status: 'success', data: { worker, token, role } }
       const { worker, token, role } = response.data;
       login(worker, role, token);
-      navigate('/worker/dashboard');
+
+      // Redirect to intended page or default to dashboard
+      const intendedPage = location.state?.from || '/worker/dashboard';
+      navigate(intendedPage, { replace: true });
     } catch (err) {
       setError(err.response?.data?.message || 'Login failed. Please try again.');
       setShowErrorModal(true);
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleErrorModalClose = () => {
+    setShowErrorModal(false);
+    navigate('/');
   };
 
   return (
@@ -80,17 +100,20 @@ const WorkerLogin = () => {
       </div>
 
       {showErrorModal && (
-        <div className="error-modal-overlay" onClick={() => setShowErrorModal(false)}>
+        <div className="error-modal-overlay" onClick={handleErrorModalClose}>
           <div className="error-modal-content" onClick={(e) => e.stopPropagation()}>
             <div className="error-modal-header">
               <h3>Login Failed</h3>
             </div>
             <div className="error-modal-body">
               <p>{error}</p>
+              <p style={{ fontSize: '0.85rem', color: '#999', marginTop: '1rem' }}>
+                Redirecting to homepage in 3 seconds...
+              </p>
             </div>
             <div className="error-modal-footer">
               <button
-                onClick={() => setShowErrorModal(false)}
+                onClick={handleErrorModalClose}
                 className="error-modal-btn"
               >
                 OK
