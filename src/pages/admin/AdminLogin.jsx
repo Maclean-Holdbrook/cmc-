@@ -11,7 +11,6 @@ const AdminLogin = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const [showErrorModal, setShowErrorModal] = useState(false);
   const { login } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
@@ -22,14 +21,13 @@ const AdminLogin = () => {
     e.preventDefault();
     e.stopPropagation();
 
-    // Don't submit if modal is showing or already loading
-    if (showErrorModal || loading) {
+    // Don't submit if already loading
+    if (loading) {
       return;
     }
 
     setLoading(true);
     setError('');
-    setShowErrorModal(false);
 
     try {
       const response = await adminAPI.login(email, password);
@@ -42,8 +40,7 @@ const AdminLogin = () => {
       navigate(intendedPage, { replace: true });
     } catch (err) {
       setError(err.response?.data?.message || 'Login failed. Please try again.');
-      setShowErrorModal(true);
-      // DO NOT NAVIGATE - STAY ON LOGIN PAGE
+      // Show error inline - NO MODAL, NO REDIRECT
     } finally {
       setLoading(false);
     }
@@ -57,6 +54,12 @@ const AdminLogin = () => {
           <h1>Admin Login</h1>
           <p>Access the admin dashboard</p>
         </div>
+
+        {error && (
+          <div className="inline-error-message">
+            {error}
+          </div>
+        )}
 
         <form onSubmit={handleSubmit} className="login-form">
           <div className="form-group">
@@ -101,42 +104,9 @@ const AdminLogin = () => {
         </form>
 
         <div className="login-footer">
-          <p><a href="/">← Back to Home</a></p>
+          <p><a href="/" onClick={(e) => { e.preventDefault(); window.location.href = '/'; }}>← Back to Home</a></p>
         </div>
       </div>
-
-      {showErrorModal && (
-        <div
-          className="error-modal-overlay"
-          onClick={(e) => e.stopPropagation()}
-          onMouseDown={(e) => e.stopPropagation()}
-        >
-          <div
-            className="error-modal-content"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className="error-modal-header">
-              <h3>Login Failed</h3>
-            </div>
-            <div className="error-modal-body">
-              <p>{error}</p>
-            </div>
-            <div className="error-modal-footer">
-              <button
-                onClick={(e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  setShowErrorModal(false);
-                }}
-                className="error-modal-btn"
-                type="button"
-              >
-                Try Again
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 };
