@@ -10,12 +10,11 @@ const AdminLogin = () => {
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
+  const [showErrorModal, setShowErrorModal] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
   const { login } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
-
-  // No auto-redirect on error - user stays on login page
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -27,7 +26,8 @@ const AdminLogin = () => {
     }
 
     setLoading(true);
-    setError('');
+    setShowErrorModal(false);
+    setErrorMessage('');
 
     try {
       const response = await adminAPI.login(email, password);
@@ -39,11 +39,21 @@ const AdminLogin = () => {
       const intendedPage = location.state?.from || '/admin/dashboard';
       navigate(intendedPage, { replace: true });
     } catch (err) {
-      setError(err.response?.data?.message || 'Login failed. Please try again.');
-      // Show error inline - NO MODAL, NO REDIRECT
+      setErrorMessage(err.response?.data?.message || 'Login failed. Please try again.');
+      setShowErrorModal(true);
+      // Show error modal - NO AUTOMATIC REDIRECT, user must click button to close
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleCloseErrorModal = (e) => {
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+    setShowErrorModal(false);
+    // User stays on login page - NO NAVIGATION
   };
 
 
@@ -54,12 +64,6 @@ const AdminLogin = () => {
           <h1>Admin Login</h1>
           <p>Access the admin dashboard</p>
         </div>
-
-        {error && (
-          <div className="inline-error-message">
-            {error}
-          </div>
-        )}
 
         <form onSubmit={handleSubmit} className="login-form">
           <div className="form-group">
@@ -107,6 +111,25 @@ const AdminLogin = () => {
           <p><a href="/" onClick={(e) => { e.preventDefault(); window.location.href = '/'; }}>← Back to Home</a></p>
         </div>
       </div>
+
+      {/* Error Modal - NO automatic redirect */}
+      {showErrorModal && (
+        <div className="error-modal-overlay" onClick={handleCloseErrorModal}>
+          <div className="error-modal-content" onClick={(e) => e.stopPropagation()}>
+            <div className="error-modal-header">
+              <h3>Login Failed</h3>
+            </div>
+            <div className="error-modal-body">
+              <p>{errorMessage}</p>
+            </div>
+            <div className="error-modal-footer">
+              <button className="error-modal-btn" onClick={handleCloseErrorModal}>
+                Try Again
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
