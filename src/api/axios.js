@@ -27,7 +27,11 @@ axiosInstance.interceptors.request.use(
 axiosInstance.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (error.response?.status === 401) {
+    // Only redirect to home on 401 if we're NOT on a login page
+    // Login pages should handle their own 401 errors
+    const isLoginPage = window.location.pathname.includes('/login');
+
+    if (error.response?.status === 401 && !isLoginPage) {
       localStorage.removeItem('token');
       localStorage.removeItem('user');
       localStorage.removeItem('role');
