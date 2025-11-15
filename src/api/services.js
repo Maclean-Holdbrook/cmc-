@@ -72,6 +72,10 @@ export const adminAPI = {
     const response = await axios.put('/admin/password', passwordData);
     return response.data;
   },
+  resetWorkerPassword: async (workerId, newPassword) => {
+    const response = await axios.put(`/admin/workers/${workerId}/reset-password`, { newPassword });
+    return response.data;
+  },
 };
 
 // Worker Services

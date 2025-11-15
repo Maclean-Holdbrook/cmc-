@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { useToast } from '../../components/common/Toast';
 import { adminAPI } from '../../api/services';
@@ -25,6 +25,7 @@ const AdminSettings = () => {
   const [loadingProfile, setLoadingProfile] = useState(false);
   const [loadingPassword, setLoadingPassword] = useState(false);
   const [loadingAdmin, setLoadingAdmin] = useState(false);
+  const [loadingWorkerReset, setLoadingWorkerReset] = useState(false);
 
   const [newAdminData, setNewAdminData] = useState({
     firstName: '',
@@ -33,6 +34,27 @@ const AdminSettings = () => {
     password: '',
     phoneNumber: ''
   });
+
+  const [workers, setWorkers] = useState([]);
+  const [workerResetData, setWorkerResetData] = useState({
+    workerId: '',
+    newPassword: '',
+    confirmPassword: ''
+  });
+
+  // Load workers on mount
+  useEffect(() => {
+    loadWorkers();
+  }, []);
+
+  const loadWorkers = async () => {
+    try {
+      const response = await adminAPI.getWorkers();
+      setWorkers(response.data.workers);
+    } catch (error) {
+      console.error('Failed to load workers:', error);
+    }
+  };
 
   const handleProfileSubmit = async (e) => {
     e.preventDefault();
@@ -107,6 +129,44 @@ const AdminSettings = () => {
       showError(error.response?.data?.message || 'Failed to create admin account');
     } finally {
       setLoadingAdmin(false);
+    }
+  };
+
+  const handleWorkerPasswordReset = async (e) => {
+    e.preventDefault();
+
+    if (!workerResetData.workerId) {
+      showError('Please select a worker');
+      return;
+    }
+
+    if (workerResetData.newPassword !== workerResetData.confirmPassword) {
+      showError('Passwords do not match');
+      return;
+    }
+
+    if (workerResetData.newPassword.length < 6) {
+      showError('Password must be at least 6 characters');
+      return;
+    }
+
+    setLoadingWorkerReset(true);
+
+    try {
+      const response = await adminAPI.resetWorkerPassword(
+        workerResetData.workerId,
+        workerResetData.newPassword
+      );
+      showSuccess(response.message || 'Worker password reset successfully!');
+      setWorkerResetData({
+        workerId: '',
+        newPassword: '',
+        confirmPassword: ''
+      });
+    } catch (error) {
+      showError(error.response?.data?.message || 'Failed to reset worker password');
+    } finally {
+      setLoadingWorkerReset(false);
     }
   };
 
@@ -274,6 +334,60 @@ const AdminSettings = () => {
 
             <button type="submit" className="btn-primary" disabled={loadingAdmin}>
               {loadingAdmin ? 'Creating...' : 'Create Admin Account'}
+            </button>
+          </form>
+        </div>
+
+        {/* Reset Worker Password */}
+        <div className="settings-card">
+          <h2>Reset Worker Password</h2>
+          <p className="section-description">Reset a worker's password when they forget it</p>
+          <form onSubmit={handleWorkerPasswordReset}>
+            <div className="form-group">
+              <label htmlFor="workerSelect">Select Worker</label>
+              <select
+                id="workerSelect"
+                value={workerResetData.workerId}
+                onChange={(e) => setWorkerResetData({ ...workerResetData, workerId: e.target.value })}
+                required
+              >
+                <option value="">Choose a worker...</option>
+                {workers.map((worker) => (
+                  <option key={worker.id} value={worker.id}>
+                    {worker.firstName} {worker.lastName} ({worker.email})
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="workerNewPassword">New Password</label>
+              <input
+                type="password"
+                id="workerNewPassword"
+                value={workerResetData.newPassword}
+                onChange={(e) => setWorkerResetData({ ...workerResetData, newPassword: e.target.value })}
+                required
+                minLength={6}
+                placeholder="Minimum 6 characters"
+              />
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="workerConfirmPassword">Confirm New Password</label>
+              <input
+                type="password"
+                id="workerConfirmPassword"
+                value={workerResetData.confirmPassword}
+                onChange={(e) => setWorkerResetData({ ...workerResetData, confirmPassword: e.target.value })}
+                required
+                minLength={6}
+                placeholder="Re-enter password"
+              />
+            </div>
+
+            <button type="submit" className="btn-primary" disabled={loadingWorkerReset}>
+              {loadingWorkerReset ? 'Resetting...' : 'Reset Worker Password'}
             </button>
           </form>
         </div>
